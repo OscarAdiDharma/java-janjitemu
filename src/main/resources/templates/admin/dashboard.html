@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - JanjiTemu</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-blue-700 text-white shadow-md sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center font-bold text-white shadow-inner">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight">JanjiTemu<span class="text-blue-300">.</span></h1>
+                    <span class="text-[10px] bg-blue-800/80 px-2 py-0.5 rounded-full font-medium text-blue-200">Panel Administrator</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <div class="hidden sm:block text-right">
+                    <p class="text-xs text-blue-200">Login sebagai</p>
+                    <p class="text-sm font-bold capitalize text-white" th:text="${currentUser.username}">Admin</p>
+                </div>
+                <a href="/logout" class="px-3.5 py-1.5 rounded-lg bg-red-500/80 hover:bg-red-600 text-white text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Success Toast Notification -->
+    <div th:if="${successMsg}" class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-4">
+        <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-sm flex items-center justify-between shadow-sm">
+            <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span class="font-medium" th:text="${successMsg}"></span>
+            </div>
+            <button onclick="this.parentElement.remove()" class="text-emerald-500 hover:text-emerald-700 text-xs font-bold">TUTUP</button>
+        </div>
+    </div>
+
+    <!-- Main Workspace Container -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-1 flex flex-col md:flex-row gap-6">
+
+        <!-- Sidebar Navigation -->
+        <aside class="w-full md:w-64 shrink-0">
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-3 space-y-1 sticky top-24">
+                <a th:href="@{/admin(tab='dashboard')}" 
+                   th:classappend="${activeTab == 'dashboard' ? 'bg-blue-50 text-blue-700 font-semibold border-l-4 border-blue-600' : 'text-slate-600 hover:bg-slate-50'}"
+                   class="flex items-center justify-between px-3.5 py-3 rounded-xl text-sm transition">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        <span>Sesi Hari Ini</span>
+                    </div>
+                    <span th:if="${todayCount > 0}" class="bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full font-bold" th:text="${todayCount}">0</span>
+                </a>
+
+                <a th:href="@{/admin(tab='all-apps')}" 
+                   th:classappend="${activeTab == 'all-apps' ? 'bg-blue-50 text-blue-700 font-semibold border-l-4 border-blue-600' : 'text-slate-600 hover:bg-slate-50'}"
+                   class="flex items-center justify-between px-3.5 py-3 rounded-xl text-sm transition">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <span>Semua Janji</span>
+                    </div>
+                    <span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full font-bold" th:text="${totalCount}">0</span>
+                </a>
+
+                <a th:href="@{/admin(tab='new-booking')}" 
+                   th:classappend="${activeTab == 'new-booking' ? 'bg-blue-50 text-blue-700 font-semibold border-l-4 border-blue-600' : 'text-slate-600 hover:bg-slate-50'}"
+                   class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm transition">
+                    <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                    <span>Booking Walk-in</span>
+                </a>
+
+                <a th:href="@{/admin(tab='services')}" 
+                   th:classappend="${activeTab == 'services' ? 'bg-blue-50 text-blue-700 font-semibold border-l-4 border-blue-600' : 'text-slate-600 hover:bg-slate-50'}"
+                   class="flex items-center justify-between px-3.5 py-3 rounded-xl text-sm transition">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        <span>Kelola Layanan</span>
+                    </div>
+                    <span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full font-bold" th:text="${services.size()}">0</span>
+                </a>
+            </div>
+
+            <!-- Summary KPI Mini Box -->
+            <div class="mt-4 bg-gradient-to-br from-blue-900 to-indigo-900 rounded-2xl p-4 text-white shadow-md">
+                <p class="text-xs font-semibold text-blue-200">Statistik Cepat</p>
+                <div class="grid grid-cols-2 gap-3 mt-3 text-center">
+                    <div class="bg-white/10 rounded-xl p-2.5">
+                        <span class="text-xl font-extrabold" th:text="${pendingCount}">0</span>
+                        <p class="text-[10px] text-amber-300 uppercase tracking-wider font-semibold">Pending</p>
+                    </div>
+                    <div class="bg-white/10 rounded-xl p-2.5">
+                        <span class="text-xl font-extrabold" th:text="${approvedCount}">0</span>
+                        <p class="text-[10px] text-emerald-300 uppercase tracking-wider font-semibold">Approved</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 space-y-6">
+
+            <!-- TAB 1: SESI HARI INI -->
+            <div th:if="${activeTab == 'dashboard'}" class="space-y-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                            <span>📅 Sesi Konsultasi Hari Ini</span>
+                            <span class="text-xs bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full font-semibold" th:text="${todayStr}">2026-10-21</span>
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">Daftar klien yang memiliki jadwal konsultasi pada hari ini</p>
+                    </div>
+                    <a th:href="@{/admin(tab='new-booking')}" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+                        <span>+ Booking Walk-in</span>
+                    </a>
+                </div>
+
+                <div th:if="${#lists.isEmpty(todayAppointments)}" class="bg-white rounded-2xl p-12 text-center border border-slate-200">
+                    <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 mx-auto flex items-center justify-center mb-3">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-700">Tidak Ada Janji Temu Hari Ini</h3>
+                    <p class="text-xs text-slate-400 mt-1">Semua jadwal kosong atau sudah diselesaikan pada sesi sebelumnya.</p>
+                </div>
+
+                <div th:unless="${#lists.isEmpty(todayAppointments)}" class="grid sm:grid-cols-2 gap-4">
+                    <div th:each="app : ${todayAppointments}" class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full"
+                                      th:classappend="${app.status == 'Approved' ? 'bg-emerald-100 text-emerald-800' : (app.status == 'Completed' ? 'bg-blue-100 text-blue-800' : (app.status == 'Rejected' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'))}"
+                                      th:text="${app.status}">Pending</span>
+                                <span class="text-xs text-slate-400 font-mono" th:text="${app.waktu != null ? app.waktu : 'Waktu Fleksibel'}">09:00</span>
+                            </div>
+
+                            <h3 class="font-bold text-slate-900 text-lg" th:text="${app.customerName}">Nama Customer</h3>
+                            <p class="text-sm font-medium text-blue-600 mt-0.5" th:text="${app.layanan}">Layanan Hukum</p>
+                        </div>
+
+                        <!-- Action Bar for Today's Session -->
+                        <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between">
+                            <form th:action="@{/admin/appointments/status}" method="POST" class="flex items-center gap-2 w-full">
+                                <input type="hidden" name="id" th:value="${app.id}">
+                                <input type="hidden" name="redirectTab" value="dashboard">
+                                <select name="status" class="text-xs border border-slate-300 rounded-lg p-1.5 bg-slate-50 font-medium text-slate-700 flex-1">
+                                    <option value="Approved" th:selected="${app.status == 'Approved'}">Approved (Terima)</option>
+                                    <option value="Completed" th:selected="${app.status == 'Completed'}">Completed (Selesai)</option>
+                                    <option value="Rejected" th:selected="${app.status == 'Rejected'}">Rejected (Tolak)</option>
+                                    <option value="Pending" th:selected="${app.status == 'Pending'}">Pending</option>
+                                </select>
+                                <button type="submit" class="bg-slate-800 hover:bg-slate-900 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition">Update</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: SEMUA JANJI TEMU -->
+            <div th:if="${activeTab == 'all-apps'}" class="space-y-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900">📅 Seluruh Janji Temu Konsultasi</h2>
+                        <p class="text-xs text-slate-500 mt-1">Total <span th:text="${totalCount}" class="font-bold text-blue-600">0</span> janji temu terdaftar dalam sistem</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs uppercase font-semibold">
+                                    <th class="py-3.5 px-4">Customer</th>
+                                    <th class="py-3.5 px-4">Layanan</th>
+                                    <th class="py-3.5 px-4">Tanggal & Waktu</th>
+                                    <th class="py-3.5 px-4">Status</th>
+                                    <th class="py-3.5 px-4 text-right">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr th:if="${#lists.isEmpty(appointments)}">
+                                    <td colspan="5" class="py-8 text-center text-slate-400">Belum ada data janji temu.</td>
+                                </tr>
+                                <tr th:each="app : ${appointments}" class="hover:bg-slate-50/80 transition">
+                                    <td class="py-3.5 px-4 font-semibold text-slate-900">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-7 h-7 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-xs" th:text="${app.customerName != null and !app.customerName.isEmpty() ? #strings.substring(app.customerName, 0, 1).toUpperCase() : 'U'}">U</div>
+                                            <span th:text="${app.customerName}">Budi Santoso</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-3.5 px-4 text-slate-600 font-medium" th:text="${app.layanan}">Perdata</td>
+                                    <td class="py-3.5 px-4 text-slate-600 text-xs">
+                                        <span class="font-semibold text-slate-800" th:text="${#dates.format(app.tanggal, 'yyyy-MM-dd')}">2026-10-21</span>
+                                        <span th:if="${app.waktu}" class="block text-slate-400" th:text="${app.waktu}">Sesi Pagi</span>
+                                    </td>
+                                    <td class="py-3.5 px-4">
+                                        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full inline-block"
+                                              th:classappend="${app.status == 'Approved' ? 'bg-emerald-100 text-emerald-800' : (app.status == 'Completed' ? 'bg-blue-100 text-blue-800' : (app.status == 'Rejected' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'))}"
+                                              th:text="${app.status}">Pending</span>
+                                    </td>
+                                    <td class="py-3.5 px-4 text-right">
+                                        <!-- Quick Status Change Form -->
+                                        <form th:action="@{/admin/appointments/status}" method="POST" class="inline-flex items-center gap-1">
+                                            <input type="hidden" name="id" th:value="${app.id}">
+                                            <input type="hidden" name="redirectTab" value="all-apps">
+                                            <select name="status" onchange="this.form.submit()" class="text-xs border border-slate-300 rounded-lg p-1 bg-white font-medium text-slate-700 cursor-pointer">
+                                                <option value="Approved" th:selected="${app.status == 'Approved'}">Approved</option>
+                                                <option value="Completed" th:selected="${app.status == 'Completed'}">Completed</option>
+                                                <option value="Rejected" th:selected="${app.status == 'Rejected'}">Rejected</option>
+                                                <option value="Pending" th:selected="${app.status == 'Pending'}">Pending</option>
+                                            </select>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: NEW BOOKING WALK-IN -->
+            <div th:if="${activeTab == 'new-booking'}" class="space-y-4">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm max-w-2xl">
+                    <div class="mb-6">
+                        <h2 class="text-xl font-bold text-slate-900">📝 Buat Janji Temu Baru (Walk-in / Telepon)</h2>
+                        <p class="text-xs text-slate-500 mt-1">Gunakan formulir ini jika klien datang langsung ke kantor atau memesan melalui kontak darurat.</p>
+                    </div>
+
+                    <form action="/admin/appointments/create" method="POST" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">Nama Customer / Klien</label>
+                            <input type="text" name="customerName" required placeholder="Contoh: Bapak H. Hendra, S.H." 
+                                   class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">Layanan Hukum</label>
+                            <select name="layanan" required class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                <option value="" disabled selected>-- Pilih Layanan --</option>
+                                <option th:each="s : ${services}" th:value="${s.nama}" th:text="${s.nama + ' (' + s.deskripsi + ')'}">Badan Usaha</option>
+                            </select>
+                        </div>
+
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">Tanggal Pertemuan</label>
+                                <input type="date" name="tanggal" required class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">Sesi Jam / Catatan Waktu</label>
+                                <input type="text" name="waktu" placeholder="Contoh: 10:00 - 11:30 WIB" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            </div>
+                        </div>
+
+                        <div class="pt-4">
+                            <button type="submit" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition shadow-md flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span>Simpan & Jadwalkan Janji</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- TAB 4: KELOLA LAYANAN (CRUD) -->
+            <div th:if="${activeTab == 'services'}" class="space-y-6">
+                <!-- Add Form -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm max-w-2xl">
+                    <h2 class="text-lg font-bold text-slate-900 mb-1">🛠 Tambah Layanan Hukum Baru</h2>
+                    <p class="text-xs text-slate-500 mb-4">Layanan ini akan otomatis muncul pada form reservasi customer.</p>
+
+                    <form action="/admin/services/create" method="POST" class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Nama Layanan</label>
+                            <input type="text" name="nama" required placeholder="Contoh: Hukum Ketenagakerjaan" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Deskripsi Singkat</label>
+                            <input type="text" name="deskripsi" placeholder="Contoh: Penyelesaian sengketa PHK dan kontrak kerja" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <button type="submit" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition shadow-sm">
+                            + Tambah Layanan
+                        </button>
+                    </form>
+                </div>
+
+                <!-- List of Services -->
+                <div class="space-y-3">
+                    <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider">Daftar Layanan Tersedia (<span th:text="${services.size()}">0</span>)</h3>
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div th:each="s : ${services}" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                            <div>
+                                <h4 class="font-bold text-base text-slate-900" th:text="${s.nama}">Badan Usaha</h4>
+                                <p class="text-xs text-slate-500 mt-1" th:text="${s.deskripsi != null ? s.deskripsi : '-'}">Deskripsi</p>
+                            </div>
+
+                            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+                                <form action="/admin/services/delete" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus layanan ini?');">
+                                    <input type="hidden" name="id" th:value="${s.id}">
+                                    <button type="submit" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg text-xs font-semibold transition">
+                                        Hapus
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

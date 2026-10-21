@@ -1,79 +1,91 @@
-# JanjiTemu (Java Spring Boot + React)
+# JanjiTemu (Full Java Web Application)
 
-Aplikasi sistem reservasi dan booking konsultasi/janji temu (layanan hukum) yang telah di-rewrite dari Node.js ke **Java 21 LTS** menggunakan framework **Spring Boot 3.4.2** dengan frontend **React 19 + Vite + Tailwind CSS**.
+Aplikasi web sistem reservasi dan booking konsultasi/janji temu (layanan hukum) yang **100% Full Java (Spring Boot 3.4.2 + Thymeleaf)** tanpa memerlukan Node.js, npm, ataupun runtime JavaScript eksternal.
 
 ---
 
-## 📁 Struktur Monorepo
+## 🛠 Tech Stack
+- **Bahasa**: Java 21 LTS (OpenJDK 21)
+- **Framework Web**: Spring Boot 3.4.2 (Spring MVC + Thymeleaf)
+- **Database**: MongoDB (Spring Data MongoDB)
+- **Security**: Spring Security 6 (Session & FormLogin + BCrypt + JWT API)
+- **Styling**: Tailwind CSS (via CDN) + Google Fonts (Plus Jakarta Sans)
+- **Build Tool**: Maven Wrapper (`mvnw`) bawaan tanpa perlu install Maven global
+
+---
+
+## 📁 Struktur Direktori Proyek
 
 ```text
 janjiTemu-Java/
-├── backend/                       # Backend Java Spring Boot
-│   ├── pom.xml                    # Maven build & dependencies
-│   ├── mvnw & mvnw.cmd            # Maven Wrapper bawaan
-│   ├── run.bat                    # Script run khusus backend
-│   └── src/
-│       ├── main/resources/
-│       │   └── application.properties # Konfigurasi port, MongoDB Atlas, & JWT
-│       └── main/java/com/janjitemu/app/
-│           ├── JanjitemuApplication.java
-│           ├── controller/        # REST API Controllers (Auth, Services, Appointments)
-│           ├── dto/               # Request & Response Data Transfer Objects
-│           ├── model/             # MongoDB Document Entities (User, ServiceItem, Appointment)
-│           ├── repository/        # Spring Data MongoDB Repositories
-│           ├── security/          # Spring Security, JWT Auth Filter, & BCrypt
-│           └── service/           # Seeder admin & layanan otomatis
-│
-├── frontend/                      # Frontend React 19 + Vite + Tailwind CSS
-│   ├── package.json
-│   ├── vite.config.js
-│   └── src/
-│       ├── App.jsx                # UI Reservasi, Dashboard Admin & Customer
-│       ├── main.jsx
-│       └── index.css
-│
-├── run-all.bat                    # Script 1-klik untuk menjalankan Backend & Frontend sekaligus
-├── run-backend.bat                # Script 1-klik menjalankan Backend saja
-└── run-frontend.bat               # Script 1-klik menjalankan Frontend saja
+├── pom.xml                                   # Konfigurasi Maven (Spring Boot, Thymeleaf, Security, MongoDB)
+├── mvnw & mvnw.cmd                           # Maven Wrapper
+├── run.bat                                   # 🚀 1-Klik Menjalankan Aplikasi
+├── README.md                                 # Panduan Proyek
+└── src/
+    ├── main/
+    │   ├── resources/
+    │   │   ├── application.properties        # Port 5000 & Konfigurasi MongoDB
+    │   │   └── templates/                    # Tampilan Web Thymeleaf
+    │   │       ├── login.html                # Halaman Masuk
+    │   │       ├── register.html             # Halaman Registrasi Customer
+    │   │       ├── admin/
+    │   │       │   └── dashboard.html        # Admin Dashboard (Sesi Hari Ini, Semua Janji, Walk-in, Layanan)
+    │   │       └── customer/
+    │   │           └── dashboard.html        # Customer Portal (Form Booking & Riwayat Pengajuan)
+    │   └── java/com/janjitemu/app/
+    │       ├── JanjitemuApplication.java     # Main Class Spring Boot
+    │       ├── controller/                   # Controller Web & REST API
+    │       │   ├── HomeController.java       # Routing root "/"
+    │       │   ├── WebAuthController.java    # /login, /register-web
+    │       │   ├── WebAdminController.java   # /admin (Sesi, filter, approval, CRUD)
+    │       │   ├── WebCustomerController.java# /customer (Booking & riwayat)
+    │       │   ├── AuthController.java       # REST API /register, /login
+    │       │   ├── ServiceController.java    # REST API /services
+    │       │   └── AppointmentController.java# REST API /appointments
+    │       ├── model/                        # Entity Dokumen MongoDB (User, ServiceItem, Appointment)
+    │       ├── repository/                   # Spring Data MongoDB Repository
+    │       ├── security/                     # Spring Security, CustomUserDetailsService, & JWT
+    │       └── service/                      # DataSeeder (Seed admin & 4 layanan default)
+    └── test/
+        └── java/com/janjitemu/app/           # Unit & Context Tests
 ```
 
 ---
 
 ## ⚡ Fitur Utama
 
-1. **Role-Based Access Control (RBAC)**:
-   - **Admin**: Mengelola seluruh janji temu, mengubah status (Approved/Rejected/Completed), melihat sesi hari ini, menambah booking walk-in, dan mengelola CRUD layanan.
-   - **Customer**: Mendaftar akun, mengajukan janji temu sesuai layanan yang tersedia, dan melihat riwayat pengajuan milik sendiri.
-2. **Autentikasi Fleksibel**:
-   - Pengguna bisa login menggunakan **Email** maupun **Username**.
-   - Password terenkripsi menggunakan **BCrypt**.
-   - Token otentikasi berbasis **JWT (JSON Web Token)** HMAC SHA-256.
-3. **Data Seeding Otomatis**:
-   - Begitu server backend pertama kali dijalankan dan terhubung ke MongoDB Atlas, sistem otomatis menginisialisasi akun admin bawaan (`admin@janjitemu.com` / `admin123`) serta 4 data layanan awal (Badan Usaha, Perdata, Tata Negara, OPHI).
-4. **Kompatibilitas Penuh**:
-   - Format `_id` MongoDB tetap dipertahankan dengan anotasi `@JsonProperty("_id")` sehingga frontend React tidak mengalami kendala.
+1. **100% Full Java**:
+   - Seluruh backend dan frontend (server-side rendering) dihandle langsung oleh Spring Boot.
+   - Tidak ada ketergantungan pada Node.js, `npm`, atau `node_modules`.
+2. **Role-Based Access Control (RBAC)**:
+   - **Admin**:
+     - 📊 *Sesi Hari Ini*: Memfilter langsung janji temu yang dijadwalkan pada hari ini dan update status cepat.
+     - 📅 *Semua Janji*: Tabel seluruh janji temu dengan badge status (Pending, Approved, Completed, Rejected).
+     - 📝 *Booking Walk-in / Telepon*: Form khusus admin untuk mencatat booking klien yang datang langsung.
+     - 🛠 *Kelola Layanan*: CRUD layanan hukum (tambah, perbarui, hapus).
+   - **Customer**:
+     - 📋 *Reservasi Janji*: Form pemilihan bidang hukum, tanggal, dan preferensi jam konsultasi.
+     - 📜 *Riwayat Pengajuan*: Daftar janji temu milik akun bersangkutan dan status persetujuannya.
+3. **Akun & Layanan Default (Auto-Seeding)**:
+   - Saat aplikasi pertama kali terkoneksi ke MongoDB, sistem otomatis membuat akun admin dan 4 layanan hukum default:
+     - **Email Admin**: `admin@janjitemu.com`
+     - **Password**: `admin123`
+4. **Login Fleksibel**:
+   - Pengguna dapat masuk menggunakan **Email** maupun **Username**.
 
 ---
 
 ## 🚀 Cara Menjalankan
 
-### Cara Termudah (Windows 1-Click)
-Cukup klik dua kali file [**`run-all.bat`**](file:///c:/Users/oscar/janjiTemu-Java/run-all.bat) di folder root.
+### Cara 1: Menggunakan File Batch (1-Klik di Windows)
+Cukup klik dua kali file [**`run.bat`**](file:///c:/Users/oscar/janjiTemu-Java/run.bat).
 
-### Menjalankan Manual via Terminal
-
-#### 1. Backend (Java 21)
+### Cara 2: Menggunakan PowerShell / Terminal
 ```powershell
-cd backend
 $env:JAVA_HOME = "C:\Program Files\Java"
 .\mvnw.cmd spring-boot:run
 ```
-Backend berjalan di: **`http://localhost:5000`**
 
-#### 2. Frontend (React)
-```powershell
-cd frontend
-npm install
-npm run dev
-```
-Frontend berjalan di: **`http://localhost:5173`**
+Buka browser di:
+👉 **`http://localhost:5000`**
