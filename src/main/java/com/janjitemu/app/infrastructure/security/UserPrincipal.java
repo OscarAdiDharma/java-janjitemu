@@ -10,12 +10,14 @@ import java.util.Collections;
 
 public class UserPrincipal implements UserDetails {
 
+    private static final long serialVersionUID = 1L;
+
     private final String id;
     private final String username;
     private final String email;
     private final String password;
     private final String role;
-    private final Collection<? extends GrantedAuthority> authorities;
+    private final Collection<GrantedAuthority> authorities;
 
     public UserPrincipal(String id, String username, String email, String password, String role, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
@@ -23,7 +25,9 @@ public class UserPrincipal implements UserDetails {
         this.email = email;
         this.password = password;
         this.role = role;
-        this.authorities = authorities;
+        this.authorities = (authorities != null)
+                ? authorities.stream().map(a -> (GrantedAuthority) a).toList()
+                : Collections.emptyList();
     }
 
     public static UserPrincipal create(User user) {
