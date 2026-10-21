@@ -21,7 +21,9 @@ Aplikasi web sistem informasi dan manajemen reservasi janji temu konsultasi huku
 
 ---
 
-## 📂 Struktur Direktori Proyek
+## 📂 Struktur Direktori Proyek (Clean Architecture)
+
+Aplikasi mengadopsi prinsip **Clean Architecture / Layered Architecture** untuk pemisahan tanggung jawab (*separation of concerns*) yang jelas, mudah diuji, dan skalabel:
 
 ```text
 janjiTemu-Java/
@@ -34,20 +36,34 @@ janjiTemu-Java/
     │   ├── resources/
     │   │   ├── application.properties        # Konfigurasi Port 5000 & koneksi database MongoDB
     │   │   └── templates/                    # File tampilan HTML (Thymeleaf)
-    │   │       ├── login.html                # Tampilan Masuk (Email/Username)
-    │   │       ├── register.html             # Tampilan Pendaftaran Klien Baru
+    │   │       ├── login.html                # Tampilan Masuk (Email/Username + Show/Hide Pass)
+    │   │       ├── register.html             # Tampilan Pendaftaran Klien Baru (+ Show/Hide Pass)
     │   │       ├── admin/
     │   │       │   └── dashboard.html        # Panel Admin (Sesi Hari Ini, Semua Janji, Walk-in, CRUD Layanan)
     │   │       └── customer/
     │   │           └── dashboard.html        # Portal Klien (Reservasi Jadwal & Riwayat)
     │   └── java/com/janjitemu/app/
     │       ├── JanjitemuApplication.java     # Entrypoint utama Spring Boot
-    │       ├── controller/                   # Controller Web & REST API
-    │       ├── dto/                          # Data Transfer Object (Request & Response)
-    │       ├── model/                        # Entity Dokumen MongoDB (User, ServiceItem, Appointment)
-    │       ├── repository/                   # Interface query Spring Data MongoDB
-    │       ├── security/                     # Konfigurasi keamanan, Session & JWT
-    │       └── service/                      # DataSeeder (Pembuat akun admin & layanan otomatis)
+    │       │
+    │       ├── domain/                       # LAPISAN 1: DOMAIN (Core Business Models & Interfaces)
+    │       │   ├── model/                    # Entitas Domain / Dokumen MongoDB (User, Appointment, ServiceItem)
+    │       │   └── repository/               # Abstraksi Repository Interface (Spring Data MongoDB)
+    │       │
+    │       ├── application/                  # LAPISAN 2: APPLICATION (Use Cases & Business Logic)
+    │       │   ├── dto/                      # Data Transfer Objects (Request/Response per domain)
+    │       │   │   ├── auth/                 # LoginRequest, RegisterRequest, AuthResponse
+    │       │   │   ├── appointment/          # AppointmentCreateRequest, AppointmentUpdateRequest
+    │       │   │   ├── service/              # ServiceRequest
+    │       │   │   └── common/               # MessageResponse
+    │       │   └── service/                  # Business Logic Services (UserService, AppointmentService, LegalServiceService)
+    │       │
+    │       ├── infrastructure/               # LAPISAN 3: INFRASTRUCTURE (Frameworks, DB, Security & Seeder)
+    │       │   ├── security/                 # Spring Security Config, UserPrincipal, CustomUserDetails, JWT Utils & Filter
+    │       │   └── seeder/                   # DataSeeder (Inisialisasi akun admin & layanan awal)
+    │       │
+    │       └── presentation/                 # LAPISAN 4: PRESENTATION (Controllers & Endpoints)
+    │           ├── web/                      # Controller Halaman Web SSR (Thymeleaf: Auth, Admin, Customer, Home)
+    │           └── api/                      # REST API Endpoints JSON (Auth, Appointment, Service)
     └── test/                                 # Unit & Integration Tests
 ```
 
