@@ -29,8 +29,12 @@ public class DataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        seedAdmin();
-        seedServices();
+        try {
+            seedAdmin();
+            seedServices();
+        } catch (Exception e) {
+            log.warn("⚠️ Gagal seeding data awal (Database mungkin belum terhubung): {}", e.getMessage());
+        }
     }
 
     private void seedAdmin() {
