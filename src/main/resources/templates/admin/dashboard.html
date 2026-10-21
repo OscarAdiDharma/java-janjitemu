@@ -106,16 +106,16 @@
             </div>
 
             <!-- Summary KPI Mini Box -->
-            <div class="mt-4 bg-gradient-to-br from-blue-900 to-indigo-900 rounded-2xl p-4 text-white shadow-md">
-                <p class="text-xs font-semibold text-blue-200">Statistik Cepat</p>
-                <div class="grid grid-cols-2 gap-3 mt-3 text-center">
-                    <div class="bg-white/10 rounded-xl p-2.5">
-                        <span class="text-xl font-extrabold" th:text="${pendingCount}">0</span>
-                        <p class="text-[10px] text-amber-300 uppercase tracking-wider font-semibold">Pending</p>
+            <div class="mt-4 bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Ringkasan Status</p>
+                <div class="grid grid-cols-2 gap-2 mt-2.5 text-center">
+                    <div class="bg-amber-50 border border-amber-100 rounded-xl p-2.5">
+                        <span class="text-lg font-bold text-amber-700" th:text="${pendingCount}">0</span>
+                        <p class="text-[10px] text-amber-600 font-semibold uppercase">Pending</p>
                     </div>
-                    <div class="bg-white/10 rounded-xl p-2.5">
-                        <span class="text-xl font-extrabold" th:text="${approvedCount}">0</span>
-                        <p class="text-[10px] text-emerald-300 uppercase tracking-wider font-semibold">Approved</p>
+                    <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-2.5">
+                        <span class="text-lg font-bold text-emerald-700" th:text="${approvedCount}">0</span>
+                        <p class="text-[10px] text-emerald-600 font-semibold uppercase">Approved</p>
                     </div>
                 </div>
             </div>
