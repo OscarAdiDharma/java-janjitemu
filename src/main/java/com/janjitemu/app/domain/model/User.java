@@ -1,6 +1,5 @@
 package com.janjitemu.app.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -36,11 +35,6 @@ public class User {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    @JsonProperty("_id")
-    public String getUnderscoreId() {
-        return id;
     }
 
     public String getUsername() {

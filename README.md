@@ -14,20 +14,19 @@ Aplikasi web sistem informasi dan manajemen reservasi janji temu konsultasi huku
 | **Database** | MongoDB | **Local / Atlas** | Database NoSQL dokumen berbasis JSON/BSON, fleksibel untuk data akun, reservasi, dan jenis layanan. |
 | **Data Access** | Spring Data MongoDB | **4.4.2** | Abstraksi repository (*MongoRepository*) untuk query, indexing, dan manipulasi data tanpa boilerplate code. |
 | **Keamanan & Autentikasi** | Spring Security | **6.4** | Mengamankan rute halaman (RBAC), hashing password dengan **BCrypt**, serta manajemen sesi login. |
-| **API Token (Opsional)** | JJWT (io.jsonwebtoken) | **0.12.6** | Pustaka pembuatan dan validasi JSON Web Token (JWT) untuk endpoint REST API. |
 | **Antarmuka (UI/CSS)** | Tailwind CSS | **v3 (CDN)** | Framework CSS utility-first untuk desain modern, responsif, kartu statistik, dan badge status. |
 | **Tipografi** | Google Fonts | **Plus Jakarta Sans** | Font modern dan profesional untuk keterbacaan yang optimal. |
 | **Build Tool** | Maven Wrapper | **Maven 3.9+** | Script pembungkus Maven (`mvnw` / `mvnw.cmd`) sehingga pengguna tidak perlu menginstal Maven secara manual. |
 
 ---
 
-## 📂 Struktur Direktori Proyek (Clean Architecture)
+## 📂 Struktur Direktori Proyek (Spring Boot MVC)
 
-Aplikasi mengadopsi prinsip **Clean Architecture / Layered Architecture** untuk pemisahan tanggung jawab (*separation of concerns*) yang jelas, mudah diuji, dan skalabel:
+Aplikasi mengadopsi arsitektur berlapis (*layered architecture*) standar Spring Boot MVC yang bersih, mudah dipahami, dan mudah dipertanggungjawabkan di hadapan dosen:
 
 ```text
 janjiTemu-Java/
-├── pom.xml                                   # File konfigurasi dependensi & build Maven
+├── pom.xml                                   # Konfigurasi dependensi & build Maven
 ├── mvnw & mvnw.cmd                           # Maven Wrapper (Windows & Linux/macOS)
 ├── run.bat                                   # Script 1-klik untuk menjalankan di Windows
 ├── README.md                                 # Dokumentasi & panduan instalasi
@@ -45,25 +44,19 @@ janjiTemu-Java/
     │   └── java/com/janjitemu/app/
     │       ├── JanjitemuApplication.java     # Entrypoint utama Spring Boot
     │       │
-    │       ├── domain/                       # LAPISAN 1: DOMAIN (Core Business Models & Interfaces)
-    │       │   ├── model/                    # Entitas Domain / Dokumen MongoDB (User, Appointment, ServiceItem)
-    │       │   └── repository/               # Abstraksi Repository Interface (Spring Data MongoDB)
+    │       ├── domain/                       # Core Models & Repositories
+    │       │   ├── model/                    # Entitas Data MongoDB (User, Appointment, ServiceItem)
+    │       │   └── repository/               # MongoRepository Interfaces
     │       │
-    │       ├── application/                  # LAPISAN 2: APPLICATION (Use Cases & Business Logic)
-    │       │   ├── dto/                      # Data Transfer Objects (Request/Response per domain)
-    │       │   │   ├── auth/                 # LoginRequest, RegisterRequest, AuthResponse
-    │       │   │   ├── appointment/          # AppointmentCreateRequest, AppointmentUpdateRequest
-    │       │   │   ├── service/              # ServiceRequest
-    │       │   │   └── common/               # MessageResponse
-    │       │   └── service/                  # Business Logic Services (UserService, AppointmentService, LegalServiceService)
+    │       ├── application/                  # Business Logic Services
+    │       │   └── service/                  # Services (UserService, AppointmentService, LegalServiceService)
     │       │
-    │       ├── infrastructure/               # LAPISAN 3: INFRASTRUCTURE (Frameworks, DB, Security & Seeder)
-    │       │   ├── security/                 # Spring Security Config, UserPrincipal, CustomUserDetails, JWT Utils & Filter
-    │       │   └── seeder/                   # DataSeeder (Inisialisasi akun admin & layanan awal)
+    │       ├── infrastructure/               # Security & Inisialisasi Data
+    │       │   ├── security/                 # Spring Security Config, UserPrincipal, CustomUserDetailsService
+    │       │   └── seeder/                   # DataSeeder (Inisialisasi akun admin & 4 layanan default)
     │       │
-    │       └── presentation/                 # LAPISAN 4: PRESENTATION (Controllers & Endpoints)
-    │           ├── web/                      # Controller Halaman Web SSR (Thymeleaf: Auth, Admin, Customer, Home)
-    │           └── api/                      # REST API Endpoints JSON (Auth, Appointment, Service)
+    │       └── presentation/                 # Web Controllers (Thymeleaf MVC)
+    │           └── web/                      # HomeController, WebAdminController, WebAuthController, WebCustomerController
     └── test/                                 # Unit & Integration Tests
 ```
 
