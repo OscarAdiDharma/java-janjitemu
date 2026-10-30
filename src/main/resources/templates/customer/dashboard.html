@@ -22,27 +22,27 @@
         }
     </script>
 </head>
-<body class="bg-slate-50 font-sans text-slate-800 antialiased min-h-screen flex flex-col">
+<body class="bg-[#F8F9F5] font-sans text-stone-800 antialiased min-h-screen flex flex-col">
 
     <!-- Top Navigation Bar -->
-    <header class="bg-blue-700 text-white shadow-md sticky top-0 z-40">
+    <header class="bg-[#0F4C3A] text-white shadow-sm sticky top-0 z-40">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center font-bold text-white shadow-inner">
+                <div class="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-md flex items-center justify-center font-bold text-white shadow-inner">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 </div>
                 <div>
-                    <h1 class="text-lg font-bold tracking-tight">JanjiTemu<span class="text-blue-300">.</span></h1>
-                    <span class="text-[10px] bg-blue-800/80 px-2 py-0.5 rounded-full font-medium text-blue-200">Portal Klien</span>
+                    <h1 class="text-lg font-bold tracking-tight">JanjiTemu<span class="text-[#C5A880]">.</span></h1>
+                    <span class="text-[10px] bg-[#0A3629] px-2 py-0.5 rounded-full font-medium text-[#D8E6E0] border border-emerald-900/40">Portal Klien</span>
                 </div>
             </div>
 
             <div class="flex items-center gap-4">
                 <div class="text-right">
-                    <p class="text-xs text-blue-200">Klien Terdaftar</p>
+                    <p class="text-xs text-emerald-200/80">Klien Terdaftar</p>
                     <p class="text-sm font-bold text-white" th:text="${currentUser.username}">Budi</p>
                 </div>
-                <a href="/logout" class="px-3.5 py-1.5 rounded-lg bg-red-500/80 hover:bg-red-600 text-white text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
+                <a href="/logout" class="px-3.5 py-1.5 rounded-lg bg-rose-600/90 hover:bg-rose-700 text-white text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                     <span>Logout</span>
                 </a>
@@ -54,10 +54,10 @@
     <div th:if="${successMsg}" class="max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-4">
         <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-sm flex items-center justify-between shadow-sm">
             <div class="flex items-center gap-2">
-                <svg class="w-5 h-5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 <span class="font-medium" th:text="${successMsg}"></span>
             </div>
-            <button onclick="this.parentElement.remove()" class="text-emerald-500 hover:text-emerald-700 text-xs font-bold">TUTUP</button>
+            <button onclick="this.parentElement.remove()" class="text-emerald-600 hover:text-emerald-800 text-xs font-bold">TUTUP</button>
         </div>
     </div>
 
@@ -66,35 +66,35 @@
         <div class="grid md:grid-cols-5 gap-8 items-start">
 
             <!-- Left: Booking Form (2 cols) -->
-            <div class="md:col-span-2 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden">
+            <div class="md:col-span-2 bg-white p-6 rounded-3xl border border-stone-200/90 shadow-sm relative overflow-hidden">
                 <div class="flex items-center gap-2.5 mb-2">
-                    <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
+                    <div class="w-8 h-8 rounded-lg bg-[#EAEFE9] text-[#0F4C3A] flex items-center justify-center">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                     </div>
-                    <h2 class="text-lg font-bold text-slate-900">Reservasi Janji Temu</h2>
+                    <h2 class="text-lg font-bold text-stone-900">Reservasi Janji Temu</h2>
                 </div>
-                <p class="text-xs text-slate-500 mb-6">Pilih bidang konsultasi hukum dan tentukan tanggal jadwal yang Anda kehendaki.</p>
+                <p class="text-xs text-stone-500 mb-6">Pilih bidang konsultasi hukum dan tentukan tanggal jadwal yang Anda kehendaki.</p>
 
                 <form action="/customer/appointments/create" method="POST" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">Pilih Layanan Hukum</label>
-                        <select name="layanan" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <label class="block text-xs font-bold text-stone-700 uppercase mb-1.5">Pilih Layanan Hukum</label>
+                        <select name="layanan" required class="w-full px-3.5 py-2.5 bg-stone-50/70 border border-stone-300 rounded-xl text-sm focus:ring-2 focus:ring-[#0F4C3A] focus:outline-none text-stone-800">
                             <option value="" disabled selected>-- Pilih Layanan --</option>
                             <option th:each="s : ${services}" th:value="${s.nama}" th:text="${s.nama + ' (' + s.deskripsi + ')'}">Badan Usaha</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">Tanggal Konsultasi</label>
-                        <input type="date" name="tanggal" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <label class="block text-xs font-bold text-stone-700 uppercase mb-1.5">Tanggal Konsultasi</label>
+                        <input type="date" name="tanggal" required class="w-full px-3.5 py-2.5 bg-stone-50/70 border border-stone-300 rounded-xl text-sm focus:ring-2 focus:ring-[#0F4C3A] focus:outline-none text-stone-800">
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">Preferensi Waktu / Jam (Opsional)</label>
-                        <input type="text" name="waktu" placeholder="Contoh: 10:00 - 11:30 WIB" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <label class="block text-xs font-bold text-stone-700 uppercase mb-1.5">Preferensi Waktu / Jam (Opsional)</label>
+                        <input type="text" name="waktu" placeholder="Contoh: 10:00 - 11:30 WIB" class="w-full px-3.5 py-2.5 bg-stone-50/70 border border-stone-300 rounded-xl text-sm focus:ring-2 focus:ring-[#0F4C3A] focus:outline-none text-stone-800">
                     </div>
 
-                    <button type="submit" class="w-full py-3 bg-blue-700 hover:bg-blue-800 text-white font-semibold rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-2 mt-4">
+                    <button type="submit" class="w-full py-3 bg-[#0F4C3A] hover:bg-[#0A3629] text-white font-semibold rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-2 mt-4">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         <span>Kirim Permohonan Janji</span>
                     </button>
@@ -105,42 +105,42 @@
             <div class="md:col-span-3 space-y-4">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h2 class="text-lg font-bold text-slate-900">Riwayat Pengajuan Saya</h2>
-                        <p class="text-xs text-slate-500">Status verifikasi dan jadwal temu dari pihak kantor</p>
+                        <h2 class="text-lg font-bold text-stone-900">Riwayat Pengajuan Saya</h2>
+                        <p class="text-xs text-stone-500">Status verifikasi dan jadwal temu dari pihak kantor</p>
                     </div>
-                    <span class="text-xs bg-slate-200 text-slate-700 font-bold px-2.5 py-1 rounded-full" th:text="${appointments.size() + ' Janji'}">0 Janji</span>
+                    <span class="text-xs bg-stone-200/80 text-stone-700 font-bold px-2.5 py-1 rounded-full" th:text="${appointments.size() + ' Janji'}">0 Janji</span>
                 </div>
 
-                <div th:if="${#lists.isEmpty(appointments)}" class="bg-white rounded-3xl p-12 text-center border border-slate-200">
-                    <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 mx-auto flex items-center justify-center mb-3">
+                <div th:if="${#lists.isEmpty(appointments)}" class="bg-white rounded-3xl p-12 text-center border border-stone-200">
+                    <div class="w-16 h-16 rounded-full bg-stone-100 text-stone-400 mx-auto flex items-center justify-center mb-3">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
                     </div>
-                    <h3 class="text-base font-bold text-slate-700">Belum Ada Pengajuan Janji Temu</h3>
-                    <p class="text-xs text-slate-400 mt-1">Gunakan formulir di sebelah kiri untuk membuat permohonan konsultasi pertama Anda.</p>
+                    <h3 class="text-base font-bold text-stone-700">Belum Ada Pengajuan Janji Temu</h3>
+                    <p class="text-xs text-stone-400 mt-1">Gunakan formulir di sebelah kiri untuk membuat permohonan konsultasi pertama Anda.</p>
                 </div>
 
                 <div th:unless="${#lists.isEmpty(appointments)}" class="space-y-3">
-                    <div th:each="app : ${appointments}" class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition flex items-center justify-between">
+                    <div th:each="app : ${appointments}" class="bg-white p-5 rounded-2xl border border-stone-200/90 shadow-sm hover:shadow-md transition flex items-center justify-between">
                         <div>
                             <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full inline-block mb-1.5"
-                                  th:classappend="${app.status == 'Approved' ? 'bg-emerald-100 text-emerald-800' : (app.status == 'Completed' ? 'bg-blue-100 text-blue-800' : (app.status == 'Rejected' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'))}"
+                                  th:classappend="${app.status == 'Approved' ? 'bg-emerald-100 text-emerald-800' : (app.status == 'Completed' ? 'bg-[#EAEFE9] text-[#0F4C3A]' : (app.status == 'Rejected' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'))}"
                                   th:text="${app.status}">Pending</span>
-                            <h3 class="font-bold text-slate-900 text-base" th:text="${app.layanan}">Layanan Hukum</h3>
-                            <div class="flex items-center gap-3 text-xs text-slate-500 mt-1">
+                            <h3 class="font-bold text-stone-900 text-base" th:text="${app.layanan}">Layanan Hukum</h3>
+                            <div class="flex items-center gap-3 text-xs text-stone-500 mt-1">
                                 <span class="flex items-center gap-1 font-medium">
-                                    <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    <svg class="w-3.5 h-3.5 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                     <span th:text="${#dates.format(app.tanggal, 'EEEE, dd MMMM yyyy')}">Senin, 21 Oktober 2026</span>
                                 </span>
-                                <span th:if="${app.waktu}" class="text-slate-400" th:text="'• ' + ${app.waktu}">• 10:00 WIB</span>
+                                <span th:if="${app.waktu}" class="text-stone-400" th:text="'• ' + ${app.waktu}">• 10:00 WIB</span>
                             </div>
                         </div>
 
                         <div class="text-right">
-                            <span th:if="${app.status == 'Approved'}" class="text-emerald-600 font-bold text-xs flex items-center gap-1">
+                            <span th:if="${app.status == 'Approved'}" class="text-emerald-700 font-bold text-xs flex items-center gap-1">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                 <span>Disetujui</span>
                             </span>
-                            <span th:if="${app.status == 'Pending'}" class="text-amber-600 font-bold text-xs flex items-center gap-1">
+                            <span th:if="${app.status == 'Pending'}" class="text-amber-700 font-bold text-xs flex items-center gap-1">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 <span>Menunggu Review</span>
                             </span>
